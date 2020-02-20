@@ -1197,7 +1197,7 @@ Citizen.CreateThread(function()
                         SpawnObj()
                         UsingComputer = false
                         Ipfinished = false
-                        Process(5000, "System hacking...")
+                        Process(25000, "System hacking...")
                         TriggerEvent("utk_oh:vaulttimer", 1)
                         TriggerServerEvent("utk_oh:openvault", 1)
                         exports['mythic_notify']:SendAlert("success", UTK.text.hacked)
