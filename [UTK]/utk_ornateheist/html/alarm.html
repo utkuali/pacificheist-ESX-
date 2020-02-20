@@ -1,0 +1,25 @@
+<!--   
+Code by Scott Plunkett aka. plunkettscott, everything related to alarm is happeing because of his code.
+Original code: https://github.com/plunkettscott/interact-sound
+His Github: https://github.com/plunkettscott
+Credits and thanks to him.
+-->
+<html>
+    <head>
+        <script src="nui://game/ui/jquery.js" type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.1/howler.min.js" type="text/javascript"></script>
+        <script>
+            var AudioPlayer = null;
+            AudioPlayer = new Howl({src: ["./alarm.ogg"]});
+            window.addEventListener('message', function(event) {
+                if (event.data.transactionType == "playSound") {
+                  AudioPlayer.volume(0.10);
+                  AudioPlayer.play();
+                }
+                if (event.data.transactionType == "stopSound") {
+                  AudioPlayer.stop();
+                }
+            });
+        </script>
+    </head> 
+</html>
