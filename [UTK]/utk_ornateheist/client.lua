@@ -1488,6 +1488,10 @@ AddEventHandler("utk_oh:vaulttimer", function(method)
         Citizen.Wait(30000)
         UTK.begingas = false
         TriggerServerEvent("utk_oh:alarm_s", 2)
+		ESX.TriggerServerCallback("utk_oh:gettotalcash", function(result)
+            text = "$"..ESX.Math.GroupDigits(result)
+            exports["mythic_notify"]:SendAlert("success", "You stole "..text)
+        end)
     end
 end)
 RegisterNetEvent("utk_oh:gas_c")
