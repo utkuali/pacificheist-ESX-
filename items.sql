@@ -4,4 +4,4 @@ INSERT INTO `items` (`name`, `label`, `limit`, `rare`, `can_remove`) VALUES -- y
     ('laptop_h', 'Hacker Laptop', 1, 0, 1),
     ('lockpick', 'Lockpick', 1, 0, 1), -- you may have this already so check it out
     ('gold_bar', 'Gold Bar', 50, 0, 1), -- you may need to edit limit and stuff
-    ('dia_box', 'Diamond Box', 50, 0, 1), -- you may need to edit limit and stuff
+    ('dia_box', 'Diamond Box', 50, 0, 1); -- you may need to edit limit and stuff
