@@ -326,7 +326,7 @@ function UTK:HandleInfo()
                                             self:IdCard()
                                         elseif not output then
                                             exports.pNotify:SendNotification({text = "You don't have the ID Card.", type = "error", timeout = 5000})
-                                            exports["mythic_notify"]:SendAlert("error", "You don't have the ID Card.")
+                                            --exports["mythic_notify"]:SendAlert("error", "You don't have the ID Card.")
                                         end
                                         end, "id_card")
                                     end
