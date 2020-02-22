@@ -42,9 +42,15 @@ This will be the last script I'm sharing to public, all of my next projects will
 
 [mythic_notify](https://github.com/mythicrp/mythic_notify) IMPORTANT INFO: This file name must be "mythic_notify"
 
+or
+
+[pNotify](https://github.com/Nick78111/pNotify) IMPORTANT INFO: This file name must be "pNotify"
+
 [progressBars](https://github.com/torpidity/progressBars/releases/tag/1.0) IMPORTANT INFO: This file name must be "progressBars"
 
 - Then just copy "utk_ornateheist" and "utk_ornateprops" to you resources file and start them from "server.cfg", make sure to start "utk_ornateprops" before the "utk_ornateheist" just in case.
+
+- If you want to use pNotify copy clientpNotify.lua and change its name to client.lua (THIS IS VERY IMPORTANT!)
 
 ## Configuration
 
