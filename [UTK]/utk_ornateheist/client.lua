@@ -1689,7 +1689,7 @@ Citizen.CreateThread(function()
                 local coords = GetEntityCoords(PlayerPedId())
 
                 if not UTK.checks.grab1 then
-                    local dst1 = GetDistanceBetweenCoords(coords, UTK.cash1.x, UTK.cash1.y, UTK.cash1.z)
+                    local dst1 = GetDistanceBetweenCoords(coords, UTK.cash1.x, UTK.cash1.y, UTK.cash1.z, true)
 
                     if dst1 <= 4 then
                         DrawText3D(UTK.cash1.x, UTK.cash1.y, UTK.cash1.z, UTK.text.lootcash, 0.40)
@@ -1701,7 +1701,7 @@ Citizen.CreateThread(function()
                     end
                 end
                 if not UTK.checks.grab2 then
-                    local dst2 = GetDistanceBetweenCoords(coords, UTK.cash2.x, UTK.cash2.y, UTK.cash2.z)
+                    local dst2 = GetDistanceBetweenCoords(coords, UTK.cash2.x, UTK.cash2.y, UTK.cash2.z, true)
 
                     if dst2 <= 4 then
                         DrawText3D(UTK.cash2.x, UTK.cash2.y, UTK.cash2.z, UTK.text.lootcash, 0.40)
@@ -1713,7 +1713,7 @@ Citizen.CreateThread(function()
                     end
                 end
                 if not UTK.checks.grab3 then
-                    local dst3 = GetDistanceBetweenCoords(coords, UTK.cash3.x, UTK.cash3.y, UTK.cash3.z)
+                    local dst3 = GetDistanceBetweenCoords(coords, UTK.cash3.x, UTK.cash3.y, UTK.cash3.z, true)
 
                     if dst3 <= 4 then
                         DrawText3D(UTK.cash3.x, UTK.cash3.y, UTK.cash3.z, UTK.text.lootcash, 0.40)
@@ -1725,7 +1725,7 @@ Citizen.CreateThread(function()
                     end
                 end
                 if not UTK.checks.grab4 then
-                    local dst4 = GetDistanceBetweenCoords(coords, UTK.gold.x, UTK.gold.y, UTK.gold.z)
+                    local dst4 = GetDistanceBetweenCoords(coords, UTK.gold.x, UTK.gold.y, UTK.gold.z, true)
 
                     if dst4 <= 4 then
                         DrawText3D(UTK.gold.x, UTK.gold.y, UTK.gold.z, UTK.text.lootgold, 0.40)
@@ -1737,7 +1737,7 @@ Citizen.CreateThread(function()
                     end
                 end
                 if not UTK.checks.grab5 then
-                    local dst5 = GetDistanceBetweenCoords(coords, UTK.dia.x, UTK.dia.y, UTK.dia.z)
+                    local dst5 = GetDistanceBetweenCoords(coords, UTK.dia.x, UTK.dia.y, UTK.dia.z, true)
 
                     if dst5 <= 4 then
                         DrawText3D(UTK.dia.x, UTK.dia.y, UTK.dia.z, UTK.text.lootdia, 0.40)
@@ -1760,7 +1760,7 @@ Citizen.CreateThread(function()
                 local coords = GetEntityCoords(PlayerPedId())
 
                 if not UTK.checks.grab1 then
-                    local dst1 = GetDistanceBetweenCoords(coords, UTK.cash1.x, UTK.cash1.y, UTK.cash1.z)
+                    local dst1 = GetDistanceBetweenCoords(coords, UTK.cash1.x, UTK.cash1.y, UTK.cash1.z, true)
 
                     if dst1 <= 4 then
                         DrawText3D(UTK.cash1.x, UTK.cash1.y, UTK.cash1.z, UTK.text.lootcash, 0.40)
@@ -1772,7 +1772,7 @@ Citizen.CreateThread(function()
                     end
                 end
                 if not UTK.checks.grab2 then
-                    local dst2 = GetDistanceBetweenCoords(coords, UTK.cash2.x, UTK.cash2.y, UTK.cash2.z)
+                    local dst2 = GetDistanceBetweenCoords(coords, UTK.cash2.x, UTK.cash2.y, UTK.cash2.z, true)
 
                     if dst2 <= 4 then
                         DrawText3D(UTK.cash2.x, UTK.cash2.y, UTK.cash2.z, UTK.text.lootcash, 0.40)
@@ -1784,7 +1784,7 @@ Citizen.CreateThread(function()
                     end
                 end
                 if not UTK.checks.grab3 then
-                    local dst3 = GetDistanceBetweenCoords(coords, UTK.cash3.x, UTK.cash3.y, UTK.cash3.z)
+                    local dst3 = GetDistanceBetweenCoords(coords, UTK.cash3.x, UTK.cash3.y, UTK.cash3.z, true)
 
                     if dst3 <= 4 then
                         DrawText3D(UTK.cash3.x, UTK.cash3.y, UTK.cash3.z, UTK.text.lootcash, 0.40)
