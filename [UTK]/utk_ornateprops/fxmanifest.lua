@@ -1,6 +1,6 @@
-fx_version 'adamant'
+fx_version "adamant"
 
-game 'gta5'
+game "gta5"
 
 files {
     "stream/ch_prop_gold_bar_01a.ydr",
@@ -14,4 +14,4 @@ files {
     "stream/ch_prop_gold_trolly_empty.ytd"
 }
 
-data_file 'DLC_ITYP_REQUEST" "stream/props.ytyp'
+data_file "DLC_ITYP_REQUEST" "stream/props.ytyp"
