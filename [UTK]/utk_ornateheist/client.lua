@@ -168,7 +168,7 @@ function UTK:GetInfo()
 end
 function UTK:HandleInfo()
     PlayerData = ESX.GetPlayerData()
-    while PlayerData == nil do
+    while PlayerData.job == nil do
         Citizen.Wait(1)
     end
     if PlayerData.job.name ~= "police" then -- you can more jobs here (also change line:457)
