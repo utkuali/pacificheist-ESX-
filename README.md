@@ -1,10 +1,10 @@
-# Pacific Standard Bank Heist Script by utku
+# Pacific Standard Bank Heist
 
-Made by utku#9999 (UTK)
+This is a Pacific Standard Bank Heist script created by utku#9999
+Feel free to edit this freely and post an improved or edited version of this script.
 
-You can edit this freely. If you want to share an improved or edited version of this script, just please ask for my permission and credit me.
-
-Altough I'm not sure changing the file names may break the script. Just don't change it.
+I would appreciate permissions beforehand and credits.
+Altough I'm not sure changing the file names may break the script, I would appreciate it if you don't change it.
 
 [My Discord](https://discord.gg/yqHmvcr)
 
