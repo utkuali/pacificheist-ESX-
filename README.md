@@ -4,7 +4,7 @@ This is a Pacific Standard Bank Heist script created by utku#9999
 Feel free to edit this freely and post an improved or edited version of this script.
 
 I would appreciate permissions beforehand and credits.
-Altough I'm not sure changing the file names may break the script, I would appreciate it if you don't change it.
+Although I'm not sure changing the file names may break the script, don't change it.
 
 [My Discord](https://discord.gg/yqHmvcr)
 
