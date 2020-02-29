@@ -1,8 +1,29 @@
 -- You have issues? Use Github
 
 ESX = nil
+
+Citizen.CreateThread(function()
+  	while ESX == nil do
+    	TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+    	Citizen.Wait(250)
+  	end
+
+  	while ESX.GetPlayerData().job == nil do
+		Citizen.Wait(250)
+	end
+	
+	PlayerData = ESX.GetPlayerData()
+end)
+
 PoliceDoors = {}
-PlayerData = nil
+
+RegisterNetEvent('esx:setJob')
+AddEventHandler('esx:setJob', function(job)
+	PlayerData.job = job
+	Citizen.Wait(5000)
+end)
+
+PoliceDoors = {}
 UTK = {
     doorchecks = {
         {x = 257.10, y = 220.30, z = 106.28, he = 339.733, h = GetHashKey("hei_v_ilev_bk_gate_pris"), h1 = "hei_v_ilev_bk_gate_pris", h2 = "hei_v_ilev_bk_gate_molten", status = 0},
