@@ -135,31 +135,6 @@ local RouletteWords = {
     "DELIRIUM",
     "MAETHRIL"
 }
-Citizen.CreateThread(function()
-    RequestAnimDict("anim@heists@ornate_bank@thermal_charge")
-    while true do
-        local coords = GetEntityCoords(PlayerPedId())
-
-        for i = 1, #UTK.doorchecks, 1 do
-            if UTK.doorchecks[i].status <= 3 then
-                local dst = GetDistanceBetweenCoords(coords, UTK.doorchecks[i].x, UTK.doorchecks[i].y, UTK.doorchecks[i].z, true)
-
-                if dst < 15 then
-                    local door = GetClosestObjectOfType(UTK.doorchecks[i].x, UTK.doorchecks[i].y, UTK.doorchecks[i].z, 2.0, UTK.doorchecks[i].h, false, false, false)
-
-                    if DoesEntityExist(door) then
-                        UTK.doorchecks[i].status = UTK.doorchecks[i].status + 1
-                        SetEntityHeading(door, UTK.doorchecks[i].he)
-                        FreezeEntityPosition(door, true)
-                    else
-                        TriggerEvent("utk_oh:moltgate_c", UTK.doorchecks[i].x, UTK.doorchecks[i].y, UTK.doorchecks[i].z, UTK.doorchecks[i].h1, UTK.doorchecks[i].h2, 2)
-                    end
-                end
-            end
-        end
-        Citizen.Wait(500)
-    end
-end)
 function UTK:GetInfo()
     ESX.TriggerServerCallback("utk_oh:GetData", function(output)
         self.info = output
@@ -167,11 +142,14 @@ function UTK:GetInfo()
     end)
 end
 function UTK:HandleInfo()
-    PlayerData = ESX.GetPlayerData()
-    while PlayerData.job == nil do
-        Citizen.Wait(1)
+    while ESX.GetPlayerData().job == nil do
+		Citizen.Wait(500)
+	end
+    while PlayerData == nil do
+        PlayerData = ESX.GetPlayerData()
+        Citizen.Wait(500)
     end
-    if PlayerData.job.name ~= "police" then -- you can more jobs here (also change line:457)
+    if PlayerData.job.name ~= "police" then
         if self.info.stage == 0 then
             Citizen.CreateThread(function()
                 while true do
@@ -442,61 +420,6 @@ function UTK:HandleInfo()
                 end
             end
         end
-    elseif PlayerData.job.name == "police" then -- CHANGE HERE!
-        Citizen.CreateThread(function()
-            ESX.TriggerServerCallback("utk_oh:GetDoors", function(result)
-                PoliceDoors = result
-            end)
-            while PoliceDoors == {} do
-                Citizen.Wait(1)
-            end
-            while true do
-                for k,v in ipairs(PoliceDoors) do
-                    if PoliceDoors[k].obj == nil or not DoesEntityExist(PoliceDoors[k].obj) then
-                        PoliceDoors[k].obj = GetClosestObjectOfType(v.loc, 1.0, GetHashKey(v.model), false, false, false)
-                    end
-                end
-                if UTK.policebreak then
-                    break
-                end
-                Citizen.Wait(1000)
-            end
-        end)
-        Citizen.CreateThread(function()
-            while true do
-                local coords = GetEntityCoords(PlayerPedId())
-                local text = nil
-                local state = nil
-
-                for k, v in ipairs(PoliceDoors) do
-                    local dst = GetDistanceBetweenCoords(coords, v.loc, true)
-
-                    if dst <= 50 then
-                        if v.locked then
-                            FreezeEntityPosition(v.obj, true)
-                            text = "[~r~E~w~] Unlock the door"
-                            state = false
-                        elseif not v.locked then
-                            FreezeEntityPosition(v.obj, false)
-                            text = "[~r~E~w~] Lock the door"
-                            state = true
-                        end
-                        if dst <= 1.5 then
-                            local x, y, z = table.unpack(v.loc)
-
-                            DrawText3D(x, y, z, text, 0.40)
-                            if IsControlJustReleased(0, 38)  then
-                                TriggerServerEvent("utk_oh:policeDoor", k, state)
-                            end
-                        end
-                    end
-                end
-                if UTK.policebreak then
-                    break
-                end
-                Citizen.Wait(1)
-            end
-        end)
     end
 end
 function UTK:Plant()
@@ -598,17 +521,20 @@ function UTK:Plant()
     exports['mythic_notify']:SendAlert("success", self.text.melted)
     StopParticleFxLooped(effect, 0)
     if self.currentplant == 0 then
-        TriggerServerEvent("utk_oh:toggleDoor", newmodel, vector3(self.loudstart.x, self.loudstart.y, self.loudstart.z), false)
+        --TriggerServerEvent("utk_oh:toggleDoor", newmodel, vector3(self.loudstart.x, self.loudstart.y, self.loudstart.z), false)
+        TriggerServerEvent("utk_oh:policeDoor", 1, false)
         self:HandleInfo()
     elseif self.currentplant == 1 then
-        TriggerServerEvent("utk_oh:toggleDoor", newmodel, vector3(self.inside1.x, self.inside1.y, self.inside1.z), false)
+        --TriggerServerEvent("utk_oh:toggleDoor", newmodel, vector3(self.inside1.x, self.inside1.y, self.inside1.z), false)
+        TriggerServerEvent("utk_oh:policeDoor", 4, false)
     elseif self.currentplant == 2 then
-        TriggerServerEvent("utk_oh:toggleDoor", newmodel, vector3(self.inside2.x, self.inside2.y, self.inside2.z), false)
+        --TriggerServerEvent("utk_oh:toggleDoor", newmodel, vector3(self.inside2.x, self.inside2.y, self.inside2.z), false)
+        TriggerServerEvent("utk_oh:policeDoor", 5, false)
     end
 end
 function UTK:Lockpick()
     UTK.disableinput = true
-    local loc = {x,y,z,h}
+    local loc = {x, y, z, h}
     if self.currentpick == 0 then
         loc.x = 236.22
         loc.y = 227.50
@@ -649,12 +575,15 @@ function UTK:Lockpick()
     UTK.disableinput = false
     if self.currentpick == 0 then
         UTK.stage0break = true
-        TriggerServerEvent("utk_oh:toggleDoor", self.silentstart.type, vector3(self.silentstart.x, self.silentstart.y, self.silentstart.z), false, self.silentstart.h)
+        --TriggerServerEvent("utk_oh:toggleDoor", self.silentstart.type, vector3(self.silentstart.x, self.silentstart.y, self.silentstart.z), false, self.silentstart.h)
+        TriggerServerEvent("utk_oh:policeDoor", 2, false)
         self:HandleInfo()
     elseif self.currentpick == 1 then
-        TriggerServerEvent("utk_oh:toggleDoor", self.inside1.type, vector3(self.inside1.x, self.inside1.y, self.inside1.z), false, self.inside1.h)
+        --TriggerServerEvent("utk_oh:toggleDoor", self.inside1.type, vector3(self.inside1.x, self.inside1.y, self.inside1.z), false, self.inside1.h)
+        TriggerServerEvent("utk_oh:policeDoor", 4, false)
     elseif self.currentpick == 2 then
-        TriggerServerEvent("utk_oh:toggleDoor", self.inside1.type, vector3(self.inside2.x, self.inside2.y, self.inside2.z), false, self.inside2.h)
+        --TriggerServerEvent("utk_oh:toggleDoor", self.inside1.type, vector3(self.inside2.x, self.inside2.y, self.inside2.z), false, self.inside2.h)
+        TriggerServerEvent("utk_oh:policeDoor", 5, false)
     end
 end
 function UTK:Hack()
@@ -771,7 +700,8 @@ function UTK:IdCard()
     if self.currentid == 1 then
         UTK.disableinput = false
         exports['mythic_notify']:SendAlert("success", UTK.text.unlocked)
-        TriggerServerEvent("utk_oh:toggleDoor", UTK.hack1.type, vector3(UTK.hack1.x, UTK.hack1.y, UTK.hack1.z), false, UTK.hack1.h)
+        --TriggerServerEvent("utk_oh:toggleDoor", UTK.hack1.type, vector3(UTK.hack1.x, UTK.hack1.y, UTK.hack1.z), false, UTK.hack1.h)
+        TriggerServerEvent("utk_oh:policeDoor", 3, false)
     elseif self.currentid == 2 then
         UTK.stage1break = true
         UTK.disableinput = false
@@ -963,16 +893,13 @@ function Search(location)
     ClearPedTasks(PlayerPedId())
     UTK.disableinput = false
 end
-function Process(ms, text)
-    exports['progressBars']:startUI(ms, text)
-    Citizen.Wait(ms)
-end
+
+function Process(ms, text) exports['progressBars']:startUI(ms, text) Citizen.Wait(ms) end
 function DrawText3D(x, y, z, text, scale) local onScreen, _x, _y = World3dToScreen2d(x, y, z) local pX, pY, pZ = table.unpack(GetGameplayCamCoords()) SetTextScale(scale, scale) SetTextFont(4) SetTextProportional(1) SetTextEntry("STRING") SetTextCentre(true) SetTextColour(255, 255, 255, 215) AddTextComponentString(text) DrawText(_x, _y) local factor = (string.len(text)) / 700 DrawRect(_x, _y + 0.0150, 0.095 + factor, 0.03, 41, 11, 41, 100) end
 function ShowVaultTimer() SetTextFont(0) SetTextProportional(0) SetTextScale(0.42, 0.42) SetTextDropShadow(0, 0, 0, 0,255) SetTextEdge(1, 0, 0, 0, 255) SetTextEntry("STRING") AddTextComponentString("~r~"..UTK.vaulttime.."~w~") DrawText(0.682, 0.96) end
 function DisableControl() DisableControlAction(0, 73, false) DisableControlAction(0, 24, true) DisableControlAction(0, 257, true) DisableControlAction(0, 25, true) DisableControlAction(0, 263, true) DisableControlAction(0, 32, true) DisableControlAction(0, 34, true) DisableControlAction(0, 31, true) DisableControlAction(0, 30, true) DisableControlAction(0, 45, true) DisableControlAction(0, 22, true) DisableControlAction(0, 44, true) DisableControlAction(0, 37, true) DisableControlAction(0, 23, true) DisableControlAction(0, 288, true) DisableControlAction(0, 289, true) DisableControlAction(0, 170, true) DisableControlAction(0, 167, true) DisableControlAction(0, 73, true) DisableControlAction(2, 199, true) DisableControlAction(0, 47, true) DisableControlAction(0, 264, true) DisableControlAction(0, 257, true) DisableControlAction(0, 140, true) DisableControlAction(0, 141, true) DisableControlAction(0, 142, true) DisableControlAction(0, 143, true) end
-function EnterAnim(coords)
-    TaskTurnPedToFaceCoord(PlayerPedId(), coords, 1000)
-end
+function EnterAnim(coords) TaskTurnPedToFaceCoord(PlayerPedId(), coords, 1000) end
+
 Citizen.CreateThread(function()
     function Initialize(scaleform)
         local scaleform = RequestScaleformMovieInteractive(scaleform)
@@ -1187,7 +1114,8 @@ Citizen.CreateThread(function()
                     DisableControlAction(0, 25, false)
                     FreezeEntityPosition(PlayerPedId(), false)
                     if UTK.hackmethod == 1 then
-                        TriggerServerEvent("utk_oh:toggleDoor", UTK.hack1.type, vector3(UTK.hack1.x, UTK.hack1.y, UTK.hack1.z), false, UTK.hack1.h)
+                        --TriggerServerEvent("utk_oh:toggleDoor", UTK.hack1.type, vector3(UTK.hack1.x, UTK.hack1.y, UTK.hack1.z), false, UTK.hack1.h)
+                        TriggerServerEvent("utk_oh:policeDoor", 3, false)
                         exports['mythic_notify']:SendAlert("success", UTK.text.hacked)
                         UsingComputer = false
                         UTK.disableinput = false
@@ -1270,7 +1198,6 @@ end
 RegisterNetEvent('esx:setJob')
 AddEventHandler('esx:setJob', function(job)
     PlayerData.job = job
-    UTK.policebreak = true
     UTK.stage0break = true
     UTK.stage1break = true
     UTK.stage2break = true
@@ -1316,7 +1243,6 @@ AddEventHandler('esx:setJob', function(job)
     Hacking = false
     UsingComputer = false
     Citizen.Wait(5000)
-    UTK.policebreak = false
     UTK.hackfinish = false
     UTK.stagelootbreak = false
     UTK.stage0break = false
@@ -1518,6 +1444,7 @@ AddEventHandler("utk_oh:gas_c", function()
             Citizen.Wait(1)
             if UTK.begingas then
                 Citizen.Wait(12000)
+
                 for i = 1, #UTK.obj, 1 do
                     local entity = GetClosestObjectOfType(UTK.obj[i].x, UTK.obj[i].y, UTK.obj[i].z, 1.0, UTK.obj[i].h, false, false, false)
 
@@ -1536,7 +1463,6 @@ AddEventHandler("utk_oh:gas_c", function()
 				Citizen.Wait(48000)
                 UTK.stage2break = true
                 UTK.stage4break = true
-                
                 exports["mythic_notify"]:SendAlert("error", "VAULT DOOR CLOSING!")
                 TriggerEvent("utk_oh:vault", 2)
                 TriggerEvent("utk_oh:vaultsound")
@@ -1578,12 +1504,12 @@ AddEventHandler("utk_oh:policenotify", function(toggle)
         end
     end
 end)
-RegisterNetEvent("utk_oh:toggleDoor_c")
+--[[RegisterNetEvent("utk_oh:toggleDoor_c")
 AddEventHandler("utk_oh:toggleDoor_c", function(door, coord, status)
     local obj = ESX.Game.GetClosestObject(door, coord)
 
     FreezeEntityPosition(obj, status)
-end)
+end)]]
 RegisterNetEvent("utk_oh:moltgate_c")
 AddEventHandler("utk_oh:moltgate_c", function(x, y, z, oldmodel, newmodel, method)
     if method == 2 then
@@ -1803,6 +1729,63 @@ Citizen.CreateThread(function()
             end
             Citizen.Wait(1)
         end
+    end
+end)
+Citizen.CreateThread(function()
+    while ESX == nil do
+        Citizen.Wait(500)
+    end
+    ESX.TriggerServerCallback("utk_oh:GetDoors", function(result)
+        PoliceDoors = result
+    end)
+    while PoliceDoors == {} do
+        Citizen.Wait(1)
+    end
+    while true do
+        for k, v in ipairs(PoliceDoors) do
+            if PoliceDoors[k].obj == nil or not DoesEntityExist(PoliceDoors[k].obj) then
+                PoliceDoors[k].obj = GetClosestObjectOfType(v.loc, 1.0, GetHashKey(v.model), false, false, false)
+                PoliceDoors[k].obj2 = GetClosestObjectOfType(v.loc, 1.0, GetHashKey(v.model2), false, false, false)
+            end
+        end
+        Citizen.Wait(1000)
+    end
+end)
+Citizen.CreateThread(function()
+    while PlayerData == nil do
+        Citizen.Wait(500)
+    end
+    while true do
+        local coords = GetEntityCoords(PlayerPedId())
+        local doortext = nil
+        local state = nil
+
+        for k, v in ipairs(PoliceDoors) do
+            local dst = GetDistanceBetweenCoords(coords, v.loc, true)
+
+            if dst <= 50 then
+                if v.locked then
+                    FreezeEntityPosition(v.obj, true)
+                    doortext = "[~r~E~w~] Unlock the door"
+                    state = false
+                elseif not v.locked then
+                    FreezeEntityPosition(v.obj, false)
+                    doortext = "[~r~E~w~] Lock the door"
+                    state = true
+                end
+                if PlayerData.job.name == "police" then
+                    if dst <= 1.5 then
+                        local x, y, z = table.unpack(v.loc)
+
+                        DrawText3D(x, y, z, doortext, 0.40)
+                        if IsControlJustReleased(0, 38)  then
+                            TriggerServerEvent("utk_oh:policeDoor", k, state)
+                        end
+                    end
+                end
+            end
+        end
+        Citizen.Wait(1)
     end
 end)
 Citizen.CreateThread(function() while true do Citizen.Wait(1) if PlaySound then local lCoords = GetEntityCoords(GetPlayerPed(-1)) local eCoords = vector3(257.10, 220.30, 106.28) local distIs  = Vdist(lCoords.x, lCoords.y, lCoords.z, eCoords) if(distIs <= 50) then SendNUIMessage({transactionType = 'playSound'}) Citizen.Wait(28000) else SendNUIMessage({transactionType = 'stopSound'}) end end end end)
