@@ -1517,7 +1517,7 @@ AddEventHandler("utk_oh:gas_c", function()
         while true do
             Citizen.Wait(1)
             if UTK.begingas then
-                Citizen.Wait(60000)
+                Citizen.Wait(12000)
                 for i = 1, #UTK.obj, 1 do
                     local entity = GetClosestObjectOfType(UTK.obj[i].x, UTK.obj[i].y, UTK.obj[i].z, 1.0, UTK.obj[i].h, false, false, false)
 
@@ -1532,9 +1532,11 @@ AddEventHandler("utk_oh:gas_c", function()
                         DeleteEntity(entity)
                     end
                 end
+				UTK.stagelootbreak = true
+				Citizen.Wait(48000)
                 UTK.stage2break = true
                 UTK.stage4break = true
-                UTK.stagelootbreak = true
+                
                 exports["mythic_notify"]:SendAlert("error", "VAULT DOOR CLOSING!")
                 TriggerEvent("utk_oh:vault", 2)
                 TriggerEvent("utk_oh:vaultsound")
