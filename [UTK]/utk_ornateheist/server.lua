@@ -10,12 +10,12 @@ local cooldown = 1800 -- amount of time to do the heist again in seconds (30min)
 local info = {stage = 0, style = nil, locked = false}
 local totalcash = 0
 local PoliceDoors = {
-    {loc = vector3(257.10, 220.30, 106.28), txtloc = vector3(257.10, 220.30, 106.28), model = "hei_v_ilev_bk_gate_pris", obj = nil, locked = true},
-    {loc = vector3(236.91, 227.50, 106.29), txtloc = vector3(236.91, 227.50, 106.29), model = "v_ilev_bk_door", obj = nil, locked = true},
-    {loc = vector3(262.35, 223.00, 107.05), txtloc = vector3(262.35, 223.00, 107.05), model = "hei_v_ilev_bk_gate2_pris", obj = nil, locked = true},
-    {loc = vector3(252.72, 220.95, 101.68), txtloc = vector3(252.72, 220.95, 101.68), model = "hei_v_ilev_bk_safegate_pris", obj = nil, locked = true},
-    {loc = vector3(261.01, 215.01, 101.68), txtloc = vector3(261.01, 215.01, 101.68), model = "hei_v_ilev_bk_safegate_pris", obj = nil, locked = true},
-    {loc = vector3(253.92, 224.56, 101.88), txtloc = vector3(253.92, 224.56, 101.88), model = "v_ilev_bk_vaultdoor", obj = nil, locked = true}
+    {loc = vector3(257.10, 220.30, 106.28), txtloc = vector3(257.10, 220.30, 106.28), model = "hei_v_ilev_bk_gate_pris", model2 = "hei_v_ilev_bk_gate_molten", obj = nil, obj2 = nil, locked = true},
+    {loc = vector3(236.91, 227.50, 106.29), txtloc = vector3(236.91, 227.50, 106.29), model = "v_ilev_bk_door", model2 = "v_ilev_bk_door", obj = nil, obj2 = nil, locked = true},
+    {loc = vector3(262.35, 223.00, 107.05), txtloc = vector3(262.35, 223.00, 107.05), model = "hei_v_ilev_bk_gate2_pris", model2 = "hei_v_ilev_bk_gate2_pris", obj = nil, obj2 = nil, locked = true},
+    {loc = vector3(252.72, 220.95, 101.68), txtloc = vector3(252.72, 220.95, 101.68), model = "hei_v_ilev_bk_safegate_pris", model2 = "hei_v_ilev_bk_safegate_molten", obj = nil, obj2 = nil, locked = true},
+    {loc = vector3(261.01, 215.01, 101.68), txtloc = vector3(261.01, 215.01, 101.68), model = "hei_v_ilev_bk_safegate_pris", model2 = "hei_v_ilev_bk_safegate_molten", obj = nil, obj2 = nil, locked = true},
+    {loc = vector3(253.92, 224.56, 101.88), txtloc = vector3(253.92, 224.56, 101.88), model = "v_ilev_bk_vaultdoor", model2 = "v_ilev_bk_vaultdoor", obj = nil, obj2 = nil, locked = true}
 }
 ESX.RegisterServerCallback("utk_oh:GetData", function(source, cb)
     cb(info)
@@ -98,10 +98,10 @@ RegisterServerEvent("utk_oh:updatecheck")
 AddEventHandler("utk_oh:updatecheck", function(var, status)
     TriggerClientEvent("utk_oh:updatecheck_c", -1, var, status)
 end)
-RegisterServerEvent("utk_oh:toggleDoor")
+--[[RegisterServerEvent("utk_oh:toggleDoor")
 AddEventHandler("utk_oh:toggleDoor", function(door, coords, status)
     TriggerClientEvent("utk_oh:toggleDoor_c", -1, door, coords, status)
-end)
+end)]]
 RegisterServerEvent("utk_oh:policeDoor")
 AddEventHandler("utk_oh:policeDoor", function(doornum, status)
     PoliceDoors[doornum].locked = status
