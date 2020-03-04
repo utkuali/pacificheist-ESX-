@@ -135,31 +135,6 @@ local RouletteWords = {
     "DELIRIUM",
     "MAETHRIL"
 }
-Citizen.CreateThread(function()
-    RequestAnimDict("anim@heists@ornate_bank@thermal_charge")
-    while true do
-        local coords = GetEntityCoords(PlayerPedId())
-
-        for i = 1, #UTK.doorchecks, 1 do
-            if UTK.doorchecks[i].status <= 3 then
-                local dst = GetDistanceBetweenCoords(coords, UTK.doorchecks[i].x, UTK.doorchecks[i].y, UTK.doorchecks[i].z, true)
-
-                if dst < 15 then
-                    local door = GetClosestObjectOfType(UTK.doorchecks[i].x, UTK.doorchecks[i].y, UTK.doorchecks[i].z, 2.0, UTK.doorchecks[i].h, false, false, false)
-
-                    if DoesEntityExist(door) then
-                        UTK.doorchecks[i].status = UTK.doorchecks[i].status + 1
-                        SetEntityHeading(door, UTK.doorchecks[i].he)
-                        FreezeEntityPosition(door, true)
-                    else
-                        TriggerEvent("utk_oh:moltgate_c", UTK.doorchecks[i].x, UTK.doorchecks[i].y, UTK.doorchecks[i].z, UTK.doorchecks[i].h1, UTK.doorchecks[i].h2, 2)
-                    end
-                end
-            end
-        end
-        Citizen.Wait(500)
-    end
-end)
 function UTK:GetInfo()
     ESX.TriggerServerCallback("utk_oh:GetData", function(output)
         self.info = output
@@ -167,11 +142,14 @@ function UTK:GetInfo()
     end)
 end
 function UTK:HandleInfo()
-    PlayerData = ESX.GetPlayerData()
-    while PlayerData.job == nil do
-        Citizen.Wait(1)
+    while ESX.GetPlayerData().job == nil do
+		Citizen.Wait(500)
+	end
+    while PlayerData == nil do
+        PlayerData = ESX.GetPlayerData()
+        Citizen.Wait(500)
     end
-    if PlayerData.job.name ~= "police" then -- you can more jobs here (also change line:457)
+    if PlayerData.job.name ~= "police" then
         if self.info.stage == 0 then
             Citizen.CreateThread(function()
                 while true do
@@ -190,8 +168,7 @@ function UTK:HandleInfo()
                                         self.currentplant = 0
                                         self:Plant()
                                     elseif output ~= true then
-                                        exports.pNotify:SendNotification({text = output, type = "error", timeout = 5000})
-                                        --exports["mythic_notify"]:SendAlert("error", output)
+                                        exports["pNotify"]:SendNotification({text = output, type = "error", timeout = 5000})
                                     end
                                 end, 1)
                             end
@@ -209,8 +186,7 @@ function UTK:HandleInfo()
                                         self.currentpick = 0
                                         self:Lockpick()
                                     elseif output ~= true then
-                                        exports.pNotify:SendNotification({text = output, type = "error", timeout = 5000})
-                                        --exports["mythic_notify"]:SendAlert("error", output)
+                                        exports["pNotify"]:SendNotification({text = output, type = "error", timeout = 5000})
                                     end
                                 end, 2)
                             end
@@ -241,8 +217,7 @@ function UTK:HandleInfo()
                                                 self.currenthack = 0
                                                 self:Hack()
                                             elseif not output then
-                                                exports.pNotify:SendNotification({text = "You don't have a hacker laptop.", type = "error", timeout = 5000})
-                                                --exports['mythic_notify']:SendAlert("error", "You don't have a hacker laptop.")
+                                                exports["pNotify"]:SendNotification({text = "You don't have a hacker laptop.", type = "error", timeout = 5000})
                                             end
                                         end, "laptop_h")
                                     end
@@ -261,8 +236,7 @@ function UTK:HandleInfo()
                                                 self.currenthack = 1
                                                 self:Hack()
                                             elseif not output then
-                                                exports.pNotify:SendNotification({text = "You don't have a hacker laptop.", type = "error", timeout = 5000})
-                                                --exports['mythic_notify']:SendAlert("error", "You don't have a hacker laptop.")
+                                                exports["pNotify"]:SendNotification({text = "You don't have a hacker laptop.", type = "error", timeout = 5000})
                                             end
                                         end, "laptop_h")
                                     end
@@ -292,8 +266,7 @@ function UTK:HandleInfo()
                                             self.currentid = 1
                                             self:IdCard()
                                         elseif not output then
-                                            exports.pNotify:SendNotification({text = "You don't have the ID Card.", type = "error", timeout = 5000})
-                                            --exports["mythic_notify"]:SendAlert("error", "You don't have the ID Card.")
+                                            exports["pNotify"]:SendNotification({text = "You don't have the ID Card.", type = "error", timeout = 5000})
                                         end
                                         end, "id_card")
                                     end
@@ -325,8 +298,7 @@ function UTK:HandleInfo()
                                             self.currentid = 2
                                             self:IdCard()
                                         elseif not output then
-                                            exports.pNotify:SendNotification({text = "You don't have the ID Card.", type = "error", timeout = 5000})
-                                            --exports["mythic_notify"]:SendAlert("error", "You don't have the ID Card.")
+                                            exports["pNotify"]:SendNotification({text = "You don't have the ID Card.", type = "error", timeout = 5000})
                                         end
                                         end, "id_card")
                                     end
@@ -361,8 +333,7 @@ function UTK:HandleInfo()
                                                 self.currentplant = 1
                                                 self:Plant()
                                             elseif not output then
-                                                exports.pNotify:SendNotification({text = "You don't have any thermal charges.", type = "error", timeout = 5000})
-                                                --exports['mythic_notify']:SendAlert("error", "You don't have any thermal charges.")
+                                                exports["pNotify"]:SendNotification({text = "You don't have any thermal charges.", type = "error", timeout = 5000})
                                             end
                                         end, "thermal_charge")
                                     end
@@ -381,8 +352,7 @@ function UTK:HandleInfo()
                                                 self.currentplant = 2
                                                 self:Plant()
                                             elseif not output then
-                                                exports.pNotify:SendNotification({text = "You don't have any thermal charges.", type = "error", timeout = 5000})
-                                                --exports['mythic_notify']:SendAlert("error", "You don't have any thermal charges.")
+                                                exports["pNotify"]:SendNotification({text = "You don't have any thermal charges.", type = "error", timeout = 5000})
                                             end
                                         end, "thermal_charge")
                                     end
@@ -414,8 +384,7 @@ function UTK:HandleInfo()
                                                     self.currentpick = 1
                                                     self:Lockpick()
                                                 elseif not output then
-                                                    exports.pNotify:SendNotification({text = "You don't have any lockpicks", type = "error", timeout = 5000})
-                                                    --exports['mythic_notify']:SendAlert("error", "You don't have any lockpicks.")
+                                                    exports["pNotify"]:SendNotification({text = "You don't have any lockpicks.", type = "error", timeout = 5000})
                                                 end
                                             end, "lockpick")
                                         end
@@ -434,8 +403,7 @@ function UTK:HandleInfo()
                                                     self.currentpick = 2
                                                     self:Lockpick()
                                                 elseif not output then
-                                                    exports.pNotify:SendNotification({text = "You don't have any lockpicks.", type = "error", timeout = 5000})
-                                                    --exports['mythic_notify']:SendAlert("error", "You don't have any lockpicks.")
+                                                    exports["pNotify"]:SendNotification({text = "You don't have any lockpicks.", type = "error", timeout = 5000})
                                                 end
                                             end, "lockpick")
                                         end
@@ -452,61 +420,6 @@ function UTK:HandleInfo()
                 end
             end
         end
-    elseif PlayerData.job.name == "police" then -- CHANGE HERE!
-        Citizen.CreateThread(function()
-            ESX.TriggerServerCallback("utk_oh:GetDoors", function(result)
-                PoliceDoors = result
-            end)
-            while PoliceDoors == {} do
-                Citizen.Wait(1)
-            end
-            while true do
-                for k,v in ipairs(PoliceDoors) do
-                    if PoliceDoors[k].obj == nil or not DoesEntityExist(PoliceDoors[k].obj) then
-                        PoliceDoors[k].obj = GetClosestObjectOfType(v.loc, 1.0, GetHashKey(v.model), false, false, false)
-                    end
-                end
-                if UTK.policebreak then
-                    break
-                end
-                Citizen.Wait(1000)
-            end
-        end)
-        Citizen.CreateThread(function()
-            while true do
-                local coords = GetEntityCoords(PlayerPedId())
-                local text = nil
-                local state = nil
-
-                for k, v in ipairs(PoliceDoors) do
-                    local dst = GetDistanceBetweenCoords(coords, v.loc, true)
-
-                    if dst <= 50 then
-                        if v.locked then
-                            FreezeEntityPosition(v.obj, true)
-                            text = "[~r~E~w~] Unlock the door"
-                            state = false
-                        elseif not v.locked then
-                            FreezeEntityPosition(v.obj, false)
-                            text = "[~r~E~w~] Lock the door"
-                            state = true
-                        end
-                        if dst <= 1.5 then
-                            local x, y, z = table.unpack(v.loc)
-
-                            DrawText3D(x, y, z, text, 0.40)
-                            if IsControlJustReleased(0, 38)  then
-                                TriggerServerEvent("utk_oh:policeDoor", k, state)
-                            end
-                        end
-                    end
-                end
-                if UTK.policebreak then
-                    break
-                end
-                Citizen.Wait(1)
-            end
-        end)
     end
 end
 function UTK:Plant()
@@ -605,21 +518,23 @@ function UTK:Plant()
     DeleteObject(bomba)
     TriggerServerEvent("utk_oh:moltgate", loc.x, loc.y, loc.z, oldmodel, newmodel)
     Citizen.Wait(9000)
-    exports.pNotify:SendNotification({text = self.text.meldet, type = "success", timeout = 5000})
-    --exports['mythic_notify']:SendAlert("success", self.text.melted)
+    exports["pNotify"]:SendNotification({text = self.text.melted, type = "success", timeout = 5000})
     StopParticleFxLooped(effect, 0)
     if self.currentplant == 0 then
-        TriggerServerEvent("utk_oh:toggleDoor", newmodel, vector3(self.loudstart.x, self.loudstart.y, self.loudstart.z), false)
+        --TriggerServerEvent("utk_oh:toggleDoor", newmodel, vector3(self.loudstart.x, self.loudstart.y, self.loudstart.z), false)
+        TriggerServerEvent("utk_oh:policeDoor", 1, false)
         self:HandleInfo()
     elseif self.currentplant == 1 then
-        TriggerServerEvent("utk_oh:toggleDoor", newmodel, vector3(self.inside1.x, self.inside1.y, self.inside1.z), false)
+        --TriggerServerEvent("utk_oh:toggleDoor", newmodel, vector3(self.inside1.x, self.inside1.y, self.inside1.z), false)
+        TriggerServerEvent("utk_oh:policeDoor", 4, false)
     elseif self.currentplant == 2 then
-        TriggerServerEvent("utk_oh:toggleDoor", newmodel, vector3(self.inside2.x, self.inside2.y, self.inside2.z), false)
+        --TriggerServerEvent("utk_oh:toggleDoor", newmodel, vector3(self.inside2.x, self.inside2.y, self.inside2.z), false)
+        TriggerServerEvent("utk_oh:policeDoor", 5, false)
     end
 end
 function UTK:Lockpick()
     UTK.disableinput = true
-    local loc = {x,y,z,h}
+    local loc = {x, y, z, h}
     if self.currentpick == 0 then
         loc.x = 236.22
         loc.y = 227.50
@@ -649,26 +564,26 @@ function UTK:Lockpick()
     TaskPlayAnim(ped, animDict, "a_uncuff", 8.0, 8.0, 6000, 1, 1, 0, 0, 0)
     exports['progressBars']:startUI(6000, self.text.lockpick..": Stage 1")
     Citizen.Wait(6500)
-    exports.pNotify:SendNotification({text = "Stage 1 "..self.text.stage, type = "success", timeout = 5000})
-    --exports['mythic_notify']:SendAlert("success", "Stage 1 "..self.text.stage)
+    exports["pNotify"]:SendNotification({text = "Stage 1 "..self.text.stage, type = "success", timeout = 5000})
     SetEntityCoords(ped, loc.x, loc.y, loc.z, 1, 0, 0, 1)
     SetEntityHeading(ped, loc.h)
     TaskPlayAnim(ped, animDict, "a_uncuff", 8.0, 8.0, 6000, 1, 1, 0, 0, 0)
     exports['progressBars']:startUI(6000, self.text.lockpick..": Stage 2")
     Citizen.Wait(6500)
-    exports.pNotify:SendNotification({text = "Stage 2 "..self.text.stage, type = "success", timeout = 5000})
-    exports.pNotify:SendNotification({text = self.text.unlocked, type = "success", timeout = 5000})
-    --exports['mythic_notify']:SendAlert("success", "Stage 2 "..self.text.stage)
-    --exports['mythic_notify']:SendAlert("success", self.text.unlocked)
+    exports["pNotify"]:SendNotification({text = "Stage 2 "..self.text.stage, type = "success", timeout = 5000})
+    exports["pNotify"]:SendNotification({text = self.text.unlocked, type = "success", timeout = 5000})
     UTK.disableinput = false
     if self.currentpick == 0 then
         UTK.stage0break = true
-        TriggerServerEvent("utk_oh:toggleDoor", self.silentstart.type, vector3(self.silentstart.x, self.silentstart.y, self.silentstart.z), false, self.silentstart.h)
+        --TriggerServerEvent("utk_oh:toggleDoor", self.silentstart.type, vector3(self.silentstart.x, self.silentstart.y, self.silentstart.z), false, self.silentstart.h)
+        TriggerServerEvent("utk_oh:policeDoor", 2, false)
         self:HandleInfo()
     elseif self.currentpick == 1 then
-        TriggerServerEvent("utk_oh:toggleDoor", self.inside1.type, vector3(self.inside1.x, self.inside1.y, self.inside1.z), false, self.inside1.h)
+        --TriggerServerEvent("utk_oh:toggleDoor", self.inside1.type, vector3(self.inside1.x, self.inside1.y, self.inside1.z), false, self.inside1.h)
+        TriggerServerEvent("utk_oh:policeDoor", 4, false)
     elseif self.currentpick == 2 then
-        TriggerServerEvent("utk_oh:toggleDoor", self.inside1.type, vector3(self.inside2.x, self.inside2.y, self.inside2.z), false, self.inside2.h)
+        --TriggerServerEvent("utk_oh:toggleDoor", self.inside1.type, vector3(self.inside2.x, self.inside2.y, self.inside2.z), false, self.inside2.h)
+        TriggerServerEvent("utk_oh:policeDoor", 5, false)
     end
 end
 function UTK:Hack()
@@ -738,8 +653,7 @@ function UTK:Hack()
     NetworkStartSynchronisedScene(netScene2)
     Citizen.Wait(2000)
     Brute()
-    exports.pNotify:SendNotification({text = "Open My Computer and navigate to HackConnect.exe", type = "success", timeout = 5000})
-    --exports["mythic_notify"]:SendAlert("success", "Open My Computer and navigate to HackConnect.exe")
+    exports["pNotify"]:SendNotification({text = "Open My Computer and navigate to HackConnect.exe", type = "success", timeout = 5000})
     while not UTK.hackfinish do
         Citizen.Wait(1)
     end
@@ -785,9 +699,8 @@ function UTK:IdCard()
     PlaySoundFrontend(-1, "ATM_WINDOW", "HUD_FRONTEND_DEFAULT_SOUNDSET")
     if self.currentid == 1 then
         UTK.disableinput = false
-        exports.pNotify:SendNotification({text = UTK.text.unlocked, type = "success", timeout = 5000})
-        --exports['mythic_notify']:SendAlert("success", UTK.text.unlocked)
-        TriggerServerEvent("utk_oh:toggleDoor", UTK.hack1.type, vector3(UTK.hack1.x, UTK.hack1.y, UTK.hack1.z), false, UTK.hack1.h)
+        exports["pNotify"]:SendNotification({text = UTK.text.unlocked, type = "success", timeout = 5000})
+        TriggerServerEvent("utk_oh:policeDoor", 3, false)
     elseif self.currentid == 2 then
         UTK.stage1break = true
         UTK.disableinput = false
@@ -797,8 +710,7 @@ function UTK:IdCard()
             Citizen.Wait(1000)
             count = count - 1
         until count == 0
-        exports.pNotify:SendNotification({text = UTK.text.used, type = "success", timeout = 5000})
-        --exports['mythic_notify']:SendAlert("success", UTK.text.used)
+        exports["pNotify"]:SendNotification({text = UTK.text.used, type = "success", timeout = 5000})
         SpawnObj()
         TriggerServerEvent("utk_oh:openvault", 1)
         TriggerEvent("utk_oh:vaulttimer", 2)
@@ -969,29 +881,24 @@ function Search(location)
     Citizen.Wait(15000)
     if UTK.searchinfo.random ~= 1 then
         location.status = true
-        exports.pNotify:SendNotification({text = UTK.text.nothing, type = "error", timeout = 5000})
-        --exports['mythic_notify']:SendAlert("error", UTK.text.nothing)
+        exports["pNotify"]:SendNotification({text = UTK.text.nothing, type = "error", timeout = 5000})
         UTK.searchinfo.random = math.random(1, UTK.cur - 1)
         UTK.cur = UTK.cur - 1
     else
         UTK.searchinfo.found = true
-        exports.pNotify:SendNotification({text = UTK.text.found, type = "success", timeout = 5000})
-        --exports['mythic_notify']:SendAlert("success", UTK.text.found)
+        exports["pNotify"]:SendNotification({text = UTK.text.found, type = "success", timeout = 5000})
         TriggerServerEvent("utk_oh:giveidcard")
     end
     ClearPedTasks(PlayerPedId())
     UTK.disableinput = false
 end
-function Process(ms, text)
-    exports['progressBars']:startUI(ms, text)
-    Citizen.Wait(ms)
-end
+
+function Process(ms, text) exports['progressBars']:startUI(ms, text) Citizen.Wait(ms) end
 function DrawText3D(x, y, z, text, scale) local onScreen, _x, _y = World3dToScreen2d(x, y, z) local pX, pY, pZ = table.unpack(GetGameplayCamCoords()) SetTextScale(scale, scale) SetTextFont(4) SetTextProportional(1) SetTextEntry("STRING") SetTextCentre(true) SetTextColour(255, 255, 255, 215) AddTextComponentString(text) DrawText(_x, _y) local factor = (string.len(text)) / 700 DrawRect(_x, _y + 0.0150, 0.095 + factor, 0.03, 41, 11, 41, 100) end
 function ShowVaultTimer() SetTextFont(0) SetTextProportional(0) SetTextScale(0.42, 0.42) SetTextDropShadow(0, 0, 0, 0,255) SetTextEdge(1, 0, 0, 0, 255) SetTextEntry("STRING") AddTextComponentString("~r~"..UTK.vaulttime.."~w~") DrawText(0.682, 0.96) end
 function DisableControl() DisableControlAction(0, 73, false) DisableControlAction(0, 24, true) DisableControlAction(0, 257, true) DisableControlAction(0, 25, true) DisableControlAction(0, 263, true) DisableControlAction(0, 32, true) DisableControlAction(0, 34, true) DisableControlAction(0, 31, true) DisableControlAction(0, 30, true) DisableControlAction(0, 45, true) DisableControlAction(0, 22, true) DisableControlAction(0, 44, true) DisableControlAction(0, 37, true) DisableControlAction(0, 23, true) DisableControlAction(0, 288, true) DisableControlAction(0, 289, true) DisableControlAction(0, 170, true) DisableControlAction(0, 167, true) DisableControlAction(0, 73, true) DisableControlAction(2, 199, true) DisableControlAction(0, 47, true) DisableControlAction(0, 264, true) DisableControlAction(0, 257, true) DisableControlAction(0, 140, true) DisableControlAction(0, 141, true) DisableControlAction(0, 142, true) DisableControlAction(0, 143, true) end
-function EnterAnim(coords)
-    TaskTurnPedToFaceCoord(PlayerPedId(), coords, 1000)
-end
+function EnterAnim(coords) TaskTurnPedToFaceCoord(PlayerPedId(), coords, 1000) end
+
 Citizen.CreateThread(function()
     function Initialize(scaleform)
         local scaleform = RequestScaleformMovieInteractive(scaleform)
@@ -1147,8 +1054,7 @@ Citizen.CreateThread(function()
                     PushScaleformMovieFunctionParameterFloat(0.0)
                     PopScaleformMovieFunctionVoid()
                     Hacking = true
-                    exports.pNotify:SendNotification({text = "Find the IP adress...", type = "success", timeout = 5000})
-                    --exports["mythic_notify"]:SendAlert("success", "Find the IP adress...")
+                    exports["pNotify"]:SendNotification({text = "Find the IP adress...", type = "success", timeout = 5000})
                 elseif program == 83 and not Hacking and Ipfinished then
 
                     PushScaleformMovieFunction(scaleform, "SET_LIVES")
@@ -1165,8 +1071,7 @@ Citizen.CreateThread(function()
                     PopScaleformMovieFunctionVoid()
 
                     Hacking = true
-                    exports.pNotify:SendNotification({text = "Find the password...", type = "success", timeout = 5000})
-                    --exports["mythic_notify"]:SendAlert("success", "Find the password...")
+                    exports["pNotify"]:SendNotification({text = "Find the password...", type = "success", timeout = 5000})
                 elseif Hacking and program == 87 then
                     lives = lives - 1
                     PushScaleformMovieFunction(scaleform, "SET_LIVES")
@@ -1184,8 +1089,7 @@ Citizen.CreateThread(function()
                     PopScaleformMovieFunctionVoid()
                     Hacking = false
                     Ipfinished = true
-                    exports.pNotify:SendNotification({text = "Run BruteForce.exe", type = "success", timeout = 5000})
-                    --exports["mythic_notify"]:SendAlert("success", "Run BruteForce.exe")
+                    exports["pNotify"]:SendNotification({text = "Run BruteForce.exe", type = "success", timeout = 5000})
                 elseif Hacking and program == 85 then
                     PlaySoundFrontend(-1, "HACKING_FAILURE", "", false)
                     PushScaleformMovieFunction(scaleform, "CLOSE_APP")
@@ -1209,9 +1113,9 @@ Citizen.CreateThread(function()
                     DisableControlAction(0, 25, false)
                     FreezeEntityPosition(PlayerPedId(), false)
                     if UTK.hackmethod == 1 then
-                        TriggerServerEvent("utk_oh:toggleDoor", UTK.hack1.type, vector3(UTK.hack1.x, UTK.hack1.y, UTK.hack1.z), false, UTK.hack1.h)
-                        exports.pNotify:SendNotification({text = UTK.text.hacked, type = "success", timeout = 5000})
-                        --exports['mythic_notify']:SendAlert("success", UTK.text.hacked)
+                        --TriggerServerEvent("utk_oh:toggleDoor", UTK.hack1.type, vector3(UTK.hack1.x, UTK.hack1.y, UTK.hack1.z), false, UTK.hack1.h)
+                        TriggerServerEvent("utk_oh:policeDoor", 3, false)
+                        exports["pNotify"]:SendNotification({text = UTK.text.hacked, type = "success", timeout = 5000})
                         UsingComputer = false
                         UTK.disableinput = false
                         UTK.hackfinish = true
@@ -1223,8 +1127,7 @@ Citizen.CreateThread(function()
                         Process(25000, "System hacking...")
                         TriggerEvent("utk_oh:vaulttimer", 1)
                         TriggerServerEvent("utk_oh:openvault", 1)
-                        exports.pNotify:SendNotification({text = UTK.text.hacked, type = "success", timeout = 5000})
-                        --exports['mythic_notify']:SendAlert("success", UTK.text.hacked)
+                        exports["pNotify"]:SendNotification({text = UTK.text.hacked, type = "success", timeout = 5000})
                         UTK.disableinput = false
                         UTK.hackfinish = true
                         UTK.info.stage = 2
@@ -1294,7 +1197,6 @@ end
 RegisterNetEvent('esx:setJob')
 AddEventHandler('esx:setJob', function(job)
     PlayerData.job = job
-    UTK.policebreak = true
     UTK.stage0break = true
     UTK.stage1break = true
     UTK.stage2break = true
@@ -1340,7 +1242,6 @@ AddEventHandler('esx:setJob', function(job)
     Hacking = false
     UsingComputer = false
     Citizen.Wait(5000)
-    UTK.policebreak = false
     UTK.hackfinish = false
     UTK.stagelootbreak = false
     UTK.stage0break = false
@@ -1417,8 +1318,7 @@ end)
 RegisterNetEvent("utk_oh:vaulttimer")
 AddEventHandler("utk_oh:vaulttimer", function(method)
     if method == 1 then
-        exports.pNotify:SendNotification({text = "You have 90 seconds until toxic gas comes in.", type = "error", timeout = 5000})
-        --exports['mythic_notify']:SendAlert("error", "You have 90 seconds until toxic gas comes in.")
+        exports["pNotify"]:SendNotification({text = "You have 90 seconds until toxic gas comes in.", type = "error", timeout = 5000})
         UTK.starttimer = true
         UTK.vaulttime = 90
         Citizen.CreateThread(function()
@@ -1465,12 +1365,10 @@ AddEventHandler("utk_oh:vaulttimer", function(method)
         TriggerServerEvent("utk_oh:alarm_s", 2)
         ESX.TriggerServerCallback("utk_oh:gettotalcash", function(result)
             text = "$"..ESX.Math.GroupDigits(result)
-            exports.pNotify:SendNotification({text = "You stole "..text, type = "success", timeout = 5000})
-            --exports["mythic_notify"]:SendAlert("success", "You stole "..text)
+            exports["pNotify"]:SendNotification({text = "You stole "..text, type = "success", timeout = 5000})
         end)
     else
-        exports.pNotify:SendNotification({text = "You have 90 seconds until toxic gas comes in.", type = "error", timeout = 5000})
-        --exports['mythic_notify']:SendAlert("error", "You have 90 seconds until toxic gas comes in.")
+        exports["pNotify"]:SendNotification({text = "You have 90 seconds until toxic gas comes in.", type = "error", timeout = 5000})
         UTK.starttimer = true
         UTK.vaulttime = 90
         Citizen.CreateThread(function()
@@ -1517,8 +1415,7 @@ AddEventHandler("utk_oh:vaulttimer", function(method)
         TriggerServerEvent("utk_oh:alarm_s", 2)
 		ESX.TriggerServerCallback("utk_oh:gettotalcash", function(result)
             text = "$"..ESX.Math.GroupDigits(result)
-            exports.pNotify:SendNotification({text = "You stole "..text, type = "success", timeout = 5000})
-            --exports["mythic_notify"]:SendAlert("success", "You stole "..text)
+            exports["pNotify"]:SendNotification({text = "You stole "..text, type = "success", timeout = 5000})
         end)
     end
 end)
@@ -1526,8 +1423,7 @@ RegisterNetEvent("utk_oh:gas_c")
 AddEventHandler("utk_oh:gas_c", function()
     Citizen.CreateThread(function()
         UTK.begingas = true
-        exports.pNotify:SendNotification({text = "Vault door will close automatically in 60 seconds!", type = "error", timeout = 5000})
-        --exports["mythic_notify"]:SendAlert("error", "Vault door will close automatically in 60 seconds!")
+        exports["pNotify"]:SendNotification({text = "Vault door will close automatically in 60 seconds!", type = "error", timeout = 5000})
         while true do
             Citizen.Wait(1)
             if UTK.begingas then
@@ -1546,7 +1442,8 @@ AddEventHandler("utk_oh:gas_c", function()
         while true do
             Citizen.Wait(1)
             if UTK.begingas then
-                Citizen.Wait(60000)
+                Citizen.Wait(12000)
+
                 for i = 1, #UTK.obj, 1 do
                     local entity = GetClosestObjectOfType(UTK.obj[i].x, UTK.obj[i].y, UTK.obj[i].z, 1.0, UTK.obj[i].h, false, false, false)
 
@@ -1561,11 +1458,11 @@ AddEventHandler("utk_oh:gas_c", function()
                         DeleteEntity(entity)
                     end
                 end
+				UTK.stagelootbreak = true
+				Citizen.Wait(48000)
                 UTK.stage2break = true
                 UTK.stage4break = true
-                UTK.stagelootbreak = true
-                exports.pNotify:SendNotification({text = "VAULT DOOR CLOSING!", type = "error", timeout = 5000})
-                --["mythic_notify"]:SendAlert("error", "VAULT DOOR CLOSING!")
+                exports["pNotify"]:SendNotification({text = "VAULT DOOR CLOSING!", type = "error", timeout = 5000})
                 TriggerEvent("utk_oh:vault", 2)
                 TriggerEvent("utk_oh:vaultsound")
                 for k, v in ipairs(UTK.doorchecks) do
@@ -1577,8 +1474,7 @@ AddEventHandler("utk_oh:gas_c", function()
                 if UTK.grabber then
                     ESX.TriggerServerCallback("utk_oh:gettotalcash", function(result)
                         text = "$"..ESX.Math.GroupDigits(result)
-                        exports.pNotify:SendNotification({text = "You stole "..text, type = "success", timeout = 5000})
-                        --exports["mythic_notify"]:SendAlert("success", "You stole "..text)
+                        exports["pNotify"]:SendNotification({text = "You stole "..text, type = "success", timeout = 5000})
                     end)
                 end
                 return
@@ -1591,8 +1487,7 @@ AddEventHandler("utk_oh:policenotify", function(toggle)
     local player = ESX.GetPlayerData()
     if player.job.name == "police" then
         if toggle == 1 then
-            exports.pNotify:SendNotification({text = "Pacific Standard Bank alarms are triggered!", type = "success", timeout = 10000})
-            --exports["mythic_notify"]:SendAlert("infrom", "Pacific Standart Bank alarms are triggered!", 10000, {["background-color"] = "#CD472A", ["color"] = "#ffffff"})
+            exports["pNotify"]:SendNotification({text = "Pacific Standart Bank alarms are triggered!", type = "error", timeout = 10000})
             if not DoesBlipExist(UTK.alarmblip) then
                 UTK.alarmblip = AddBlipForCoord(UTK.loudstart.x, UTK.loudstart.y, UTK.loudstart.z)
                 SetBlipSprite(UTK.alarmblip, 161)
@@ -1608,12 +1503,12 @@ AddEventHandler("utk_oh:policenotify", function(toggle)
         end
     end
 end)
-RegisterNetEvent("utk_oh:toggleDoor_c")
+--[[RegisterNetEvent("utk_oh:toggleDoor_c")
 AddEventHandler("utk_oh:toggleDoor_c", function(door, coord, status)
     local obj = ESX.Game.GetClosestObject(door, coord)
 
     FreezeEntityPosition(obj, status)
-end)
+end)]]
 RegisterNetEvent("utk_oh:moltgate_c")
 AddEventHandler("utk_oh:moltgate_c", function(x, y, z, oldmodel, newmodel, method)
     if method == 2 then
@@ -1721,7 +1616,7 @@ Citizen.CreateThread(function()
                 local coords = GetEntityCoords(PlayerPedId())
 
                 if not UTK.checks.grab1 then
-                    local dst1 = GetDistanceBetweenCoords(coords, UTK.cash1.x, UTK.cash1.y, UTK.cash1.z)
+                    local dst1 = GetDistanceBetweenCoords(coords, UTK.cash1.x, UTK.cash1.y, UTK.cash1.z, true)
 
                     if dst1 <= 4 then
                         DrawText3D(UTK.cash1.x, UTK.cash1.y, UTK.cash1.z, UTK.text.lootcash, 0.40)
@@ -1733,7 +1628,7 @@ Citizen.CreateThread(function()
                     end
                 end
                 if not UTK.checks.grab2 then
-                    local dst2 = GetDistanceBetweenCoords(coords, UTK.cash2.x, UTK.cash2.y, UTK.cash2.z)
+                    local dst2 = GetDistanceBetweenCoords(coords, UTK.cash2.x, UTK.cash2.y, UTK.cash2.z, true)
 
                     if dst2 <= 4 then
                         DrawText3D(UTK.cash2.x, UTK.cash2.y, UTK.cash2.z, UTK.text.lootcash, 0.40)
@@ -1745,7 +1640,7 @@ Citizen.CreateThread(function()
                     end
                 end
                 if not UTK.checks.grab3 then
-                    local dst3 = GetDistanceBetweenCoords(coords, UTK.cash3.x, UTK.cash3.y, UTK.cash3.z)
+                    local dst3 = GetDistanceBetweenCoords(coords, UTK.cash3.x, UTK.cash3.y, UTK.cash3.z, true)
 
                     if dst3 <= 4 then
                         DrawText3D(UTK.cash3.x, UTK.cash3.y, UTK.cash3.z, UTK.text.lootcash, 0.40)
@@ -1757,7 +1652,7 @@ Citizen.CreateThread(function()
                     end
                 end
                 if not UTK.checks.grab4 then
-                    local dst4 = GetDistanceBetweenCoords(coords, UTK.gold.x, UTK.gold.y, UTK.gold.z)
+                    local dst4 = GetDistanceBetweenCoords(coords, UTK.gold.x, UTK.gold.y, UTK.gold.z, true)
 
                     if dst4 <= 4 then
                         DrawText3D(UTK.gold.x, UTK.gold.y, UTK.gold.z, UTK.text.lootgold, 0.40)
@@ -1769,7 +1664,7 @@ Citizen.CreateThread(function()
                     end
                 end
                 if not UTK.checks.grab5 then
-                    local dst5 = GetDistanceBetweenCoords(coords, UTK.dia.x, UTK.dia.y, UTK.dia.z)
+                    local dst5 = GetDistanceBetweenCoords(coords, UTK.dia.x, UTK.dia.y, UTK.dia.z, true)
 
                     if dst5 <= 4 then
                         DrawText3D(UTK.dia.x, UTK.dia.y, UTK.dia.z, UTK.text.lootdia, 0.40)
@@ -1792,7 +1687,7 @@ Citizen.CreateThread(function()
                 local coords = GetEntityCoords(PlayerPedId())
 
                 if not UTK.checks.grab1 then
-                    local dst1 = GetDistanceBetweenCoords(coords, UTK.cash1.x, UTK.cash1.y, UTK.cash1.z)
+                    local dst1 = GetDistanceBetweenCoords(coords, UTK.cash1.x, UTK.cash1.y, UTK.cash1.z, true)
 
                     if dst1 <= 4 then
                         DrawText3D(UTK.cash1.x, UTK.cash1.y, UTK.cash1.z, UTK.text.lootcash, 0.40)
@@ -1804,7 +1699,7 @@ Citizen.CreateThread(function()
                     end
                 end
                 if not UTK.checks.grab2 then
-                    local dst2 = GetDistanceBetweenCoords(coords, UTK.cash2.x, UTK.cash2.y, UTK.cash2.z)
+                    local dst2 = GetDistanceBetweenCoords(coords, UTK.cash2.x, UTK.cash2.y, UTK.cash2.z, true)
 
                     if dst2 <= 4 then
                         DrawText3D(UTK.cash2.x, UTK.cash2.y, UTK.cash2.z, UTK.text.lootcash, 0.40)
@@ -1816,7 +1711,7 @@ Citizen.CreateThread(function()
                     end
                 end
                 if not UTK.checks.grab3 then
-                    local dst3 = GetDistanceBetweenCoords(coords, UTK.cash3.x, UTK.cash3.y, UTK.cash3.z)
+                    local dst3 = GetDistanceBetweenCoords(coords, UTK.cash3.x, UTK.cash3.y, UTK.cash3.z, true)
 
                     if dst3 <= 4 then
                         DrawText3D(UTK.cash3.x, UTK.cash3.y, UTK.cash3.z, UTK.text.lootcash, 0.40)
@@ -1833,6 +1728,63 @@ Citizen.CreateThread(function()
             end
             Citizen.Wait(1)
         end
+    end
+end)
+Citizen.CreateThread(function()
+    while ESX == nil do
+        Citizen.Wait(500)
+    end
+    ESX.TriggerServerCallback("utk_oh:GetDoors", function(result)
+        PoliceDoors = result
+    end)
+    while PoliceDoors == {} do
+        Citizen.Wait(1)
+    end
+    while true do
+        for k, v in ipairs(PoliceDoors) do
+            if PoliceDoors[k].obj == nil or not DoesEntityExist(PoliceDoors[k].obj) then
+                PoliceDoors[k].obj = GetClosestObjectOfType(v.loc, 1.0, GetHashKey(v.model), false, false, false)
+                PoliceDoors[k].obj2 = GetClosestObjectOfType(v.loc, 1.0, GetHashKey(v.model2), false, false, false)
+            end
+        end
+        Citizen.Wait(1000)
+    end
+end)
+Citizen.CreateThread(function()
+    while PlayerData == nil do
+        Citizen.Wait(500)
+    end
+    while true do
+        local coords = GetEntityCoords(PlayerPedId())
+        local doortext = nil
+        local state = nil
+
+        for k, v in ipairs(PoliceDoors) do
+            local dst = GetDistanceBetweenCoords(coords, v.loc, true)
+
+            if dst <= 50 then
+                if v.locked then
+                    FreezeEntityPosition(v.obj, true)
+                    doortext = "[~r~E~w~] Unlock the door"
+                    state = false
+                elseif not v.locked then
+                    FreezeEntityPosition(v.obj, false)
+                    doortext = "[~r~E~w~] Lock the door"
+                    state = true
+                end
+                if PlayerData.job.name == "police" then
+                    if dst <= 1.5 then
+                        local x, y, z = table.unpack(v.loc)
+
+                        DrawText3D(x, y, z, doortext, 0.40)
+                        if IsControlJustReleased(0, 38)  then
+                            TriggerServerEvent("utk_oh:policeDoor", k, state)
+                        end
+                    end
+                end
+            end
+        end
+        Citizen.Wait(1)
     end
 end)
 Citizen.CreateThread(function() while true do Citizen.Wait(1) if PlaySound then local lCoords = GetEntityCoords(GetPlayerPed(-1)) local eCoords = vector3(257.10, 220.30, 106.28) local distIs  = Vdist(lCoords.x, lCoords.y, lCoords.z, eCoords) if(distIs <= 50) then SendNUIMessage({transactionType = 'playSound'}) Citizen.Wait(28000) else SendNUIMessage({transactionType = 'stopSound'}) end end end end)
