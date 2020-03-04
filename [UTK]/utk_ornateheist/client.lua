@@ -13,7 +13,7 @@ UTK = {
         {x = 253.92, y = 224.56, z = 101.88, he = 160.000, h = GetHashKey("v_ilev_bk_vaultdoor"), status = 0,}
     },
     enablesupersilent = false, -- coming soon (or not)...
-    enablextras = true, -- enable gold and diamond looting (yay!) [needs utk_ornateheist]
+    enablextras = true, -- enable gold and diamond looting (yay!) [needs utk_ornateprops]
     disableinput = false, -- don't change anything else unless you know what you are doing
     hackfinish = false,
     initiator = false,
