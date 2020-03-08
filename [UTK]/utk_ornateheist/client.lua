@@ -1437,7 +1437,7 @@ AddEventHandler("utk_oh:gas_c", function()
                 local dst1 = GetDistanceBetweenCoords(playerloc, 252.71, 218.22, 101.68, true)
                 local dst2 = GetDistanceBetweenCoords(playerloc, 262.78, 213.22, 101.68, true)
 
-                if dst1 <= 5 or dst2 <= 5 then
+                if dst1 <= 5 or dst2 <= 6.5 then
                     ApplyDamageToPed(PlayerPedId(), 3, false)
                     Citizen.Wait(500)
                 end
