@@ -749,6 +749,8 @@ function SpawnObj()
     TriggerServerEvent("utk_oh:startloot")
 end
 function Loot(currentgrab)
+    Grab2clear = false
+    Grab3clear = false
     UTK.grabber = true
     Trolley = nil
     local ped = PlayerPedId()
@@ -829,41 +831,44 @@ function Loot(currentgrab)
 		Citizen.Wait(1)
 		NetworkRequestControlOfEntity(Trolley)
 	end
-	local bag = CreateObject(GetHashKey("hei_p_m_bag_var22_arm_s"), GetEntityCoords(PlayerPedId()), true, false, false)
-    local scene1 = NetworkCreateSynchronisedScene(GetEntityCoords(Trolley), GetEntityRotation(Trolley), 2, false, false, 1065353216, 0, 1.3)
-	NetworkAddPedToSynchronisedScene(ped, scene1, "anim@heists@ornate_bank@grab_cash", "intro", 1.5, -4.0, 1, 16, 1148846080, 0)
-    NetworkAddEntityToSynchronisedScene(bag, scene1, "anim@heists@ornate_bank@grab_cash", "bag_intro", 4.0, -8.0, 1)
+	GrabBag = CreateObject(GetHashKey("hei_p_m_bag_var22_arm_s"), GetEntityCoords(PlayerPedId()), true, false, false)
+    Grab1 = NetworkCreateSynchronisedScene(GetEntityCoords(Trolley), GetEntityRotation(Trolley), 2, false, false, 1065353216, 0, 1.3)
+	NetworkAddPedToSynchronisedScene(ped, Grab1, "anim@heists@ornate_bank@grab_cash", "intro", 1.5, -4.0, 1, 16, 1148846080, 0)
+    NetworkAddEntityToSynchronisedScene(GrabBag, Grab1, "anim@heists@ornate_bank@grab_cash", "bag_intro", 4.0, -8.0, 1)
     SetPedComponentVariation(ped, 5, 0, 0, 0)
-	NetworkStartSynchronisedScene(scene1)
+	NetworkStartSynchronisedScene(Grab1)
 	Citizen.Wait(1500)
 	CashAppear()
-
-    local scene2 = NetworkCreateSynchronisedScene(GetEntityCoords(Trolley), GetEntityRotation(Trolley), 2, false, false, 1065353216, 0, 1.3)
-	NetworkAddPedToSynchronisedScene(ped, scene2, "anim@heists@ornate_bank@grab_cash", "grab", 1.5, -4.0, 1, 16, 1148846080, 0)
-	NetworkAddEntityToSynchronisedScene(bag, scene2, "anim@heists@ornate_bank@grab_cash", "bag_grab", 4.0, -8.0, 1)
-	NetworkAddEntityToSynchronisedScene(Trolley, scene2, "anim@heists@ornate_bank@grab_cash", "cart_cash_dissapear", 4.0, -8.0, 1)
-	NetworkStartSynchronisedScene(scene2)
-	Citizen.Wait(37000)
-
-    local scene3 = NetworkCreateSynchronisedScene(GetEntityCoords(Trolley), GetEntityRotation(Trolley), 2, false, false, 1065353216, 0, 1.3)
-	NetworkAddPedToSynchronisedScene(ped, scene3, "anim@heists@ornate_bank@grab_cash", "exit", 1.5, -4.0, 1, 16, 1148846080, 0)
-	NetworkAddEntityToSynchronisedScene(bag, scene3, "anim@heists@ornate_bank@grab_cash", "bag_exit", 4.0, -8.0, 1)
-	NetworkStartSynchronisedScene(scene3)
-    NewTrolley = CreateObject(emptyobj, GetEntityCoords(Trolley) + vector3(0.0, 0.0, - 0.985), true, false, false)
-
-    SetEntityRotation(NewTrolley, GetEntityRotation(Trolley))
-    while not NetworkHasControlOfEntity(Trolley) do
-		Citizen.Wait(1)
-		NetworkRequestControlOfEntity(Trolley)
-	end
-    DeleteObject(Trolley)
-    while DoesEntityExist(Trolley) do
-        Citizen.Wait(1)
-        DeleteObject(Trolley)
+    if not Grab2clear then
+        Grab2 = NetworkCreateSynchronisedScene(GetEntityCoords(Trolley), GetEntityRotation(Trolley), 2, false, false, 1065353216, 0, 1.3)
+        NetworkAddPedToSynchronisedScene(ped, Grab2, "anim@heists@ornate_bank@grab_cash", "grab", 1.5, -4.0, 1, 16, 1148846080, 0)
+        NetworkAddEntityToSynchronisedScene(GrabBag, Grab2, "anim@heists@ornate_bank@grab_cash", "bag_grab", 4.0, -8.0, 1)
+        NetworkAddEntityToSynchronisedScene(Trolley, Grab2, "anim@heists@ornate_bank@grab_cash", "cart_cash_dissapear", 4.0, -8.0, 1)
+        NetworkStartSynchronisedScene(Grab2)
+        Citizen.Wait(37000)
     end
-	PlaceObjectOnGroundProperly(NewTrolley)
+    if not Grab3clear then
+        Grab3 = NetworkCreateSynchronisedScene(GetEntityCoords(Trolley), GetEntityRotation(Trolley), 2, false, false, 1065353216, 0, 1.3)
+        NetworkAddPedToSynchronisedScene(ped, Grab3, "anim@heists@ornate_bank@grab_cash", "exit", 1.5, -4.0, 1, 16, 1148846080, 0)
+        NetworkAddEntityToSynchronisedScene(GrabBag, Grab3, "anim@heists@ornate_bank@grab_cash", "bag_exit", 4.0, -8.0, 1)
+        NetworkStartSynchronisedScene(Grab3)
+        NewTrolley = CreateObject(emptyobj, GetEntityCoords(Trolley) + vector3(0.0, 0.0, - 0.985), true, false, false)
+        SetEntityRotation(NewTrolley, GetEntityRotation(Trolley))
+        while not NetworkHasControlOfEntity(Trolley) do
+            Citizen.Wait(1)
+            NetworkRequestControlOfEntity(Trolley)
+        end
+        DeleteObject(Trolley)
+        while DoesEntityExist(Trolley) do
+            Citizen.Wait(1)
+            DeleteObject(Trolley)
+        end
+        PlaceObjectOnGroundProperly(NewTrolley)
+    end
 	Citizen.Wait(1800)
-	DeleteObject(bag)
+	if DoesEntityExist(GrabBag) then
+        DeleteEntity(GrabBag)
+    end
     SetPedComponentVariation(ped, 5, 45, 0, 0)
 	RemoveAnimDict("anim@heists@ornate_bank@grab_cash")
 	SetModelAsNoLongerNeeded(emptyobj)
@@ -1443,8 +1448,16 @@ AddEventHandler("utk_oh:gas_c", function()
         while true do
             Citizen.Wait(1)
             if UTK.begingas then
+				Grab2clear = true
+                Grab3clear = true
+                if DoesEntityExist(GrabBag) then
+                    DeleteEntity(GrabBag)
+                end
+                SetPedComponentVariation(ped, 5, 45, 0, 0)
+                NetworkStopSynchronisedScene(Grab1)
+                NetworkStopSynchronisedScene(Grab2)
+                NetworkStopSynchronisedScene(Grab3)
                 Citizen.Wait(12000)
-
                 for i = 1, #UTK.obj, 1 do
                     local entity = GetClosestObjectOfType(UTK.obj[i].x, UTK.obj[i].y, UTK.obj[i].z, 1.0, UTK.obj[i].h, false, false, false)
 
