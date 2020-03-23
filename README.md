@@ -1,10 +1,10 @@
 # Pacific Standard Bank Heist Script by utku
 
-Made by utku#9999 (UTK)
+Made by **utku#9999**
 
 You can edit this freely. If you want to share an improved or edited version of this script, just please ask for my permission and credit me.
 
-Altough I'm not sure changing the file names may break the script. Just don't change it.
+Altough I'm not sure, changing the folder name may break the script. Just don't change it.
 
 [My Discord](https://discord.gg/yqHmvcr)
 
@@ -14,21 +14,23 @@ I share my ideas and announce upcoming scripts here, join if you are interested.
 
 This will be the last script I'm sharing to public, all of my next projects will be Patreon only.
 
-## My Next Projects
+## My Other Resources
 
-- Fleeca Bank Heists (will work for every bank and you can easily add new banks)
+- [Data Crack Mini Hacking Game](https://forum.cfx.re/t/standalone-datacrack-hacking-mini-game/1066972) --**FINISHED**--
 
-- Blaine County Savings Bank Heist (this one will be special like Pacific Heist too)
+- [Fleeca Bank Heists (will work for every bank and you can easily add new banks)](https://www.youtube.com/watch?v=92kEXiBzrPQ) --**FINISHED**--
 
-- Credit System (something like bitcoin or whatever you name it, basically a new currency with it's own markets, vehicle shops... Also vehicle plate change, phone number change and more.)
+- [Blaine County Savings Bank Heist (this one will be special like Pacific Heist too)](https://streamable.com/olr9e) --**SOON**--
 
-- Gangs System (it's similar to esx_policejob but very optimized and you can easily add more gangs and edit them, still very early phase)
+- [Credit System (something like bitcoin or whatever you name it, basically a new currency with it's own markets, vehicle shops... Also vehicle plate change, phone number change and more.)](https://www.patreon.com/posts/credit-system-34192895) --**FINISHED**--
 
-- Discord ID Lookup in-game
+- Gangs System (very optimized and you can easily add more gangs and edit them, still very early phase but will be something like gang turfs and managing npc gang members, deploying them...) --**SOON**--
 
-- Shift Log to Discord (Shift start and end date with total duration for whichever job you want)
+- [Discord ID Lookup in-game](https://cdn.discordapp.com/attachments/680097090986049548/683030895313420305/unknown.png) **FINISHED** 
 
-- Advanced Smuggler's Job (Buying warehouse and smuggling goods)
+- [Shift Log to Discord (Shift start and end date with total duration for whichever job you want)](https://www.patreon.com/posts/shift-log-to-34425325) --**FINISHED**--
+
+- Advanced Smuggler's Job (Buying warehouse and smuggling goods) --**SOON**--
 
 ## Installation
 
