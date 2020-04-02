@@ -13,7 +13,7 @@ Credits and thanks to him.
             AudioPlayer = new Howl({src: ["./alarm.ogg"]});
             window.addEventListener('message', function(event) {
                 if (event.data.transactionType == "playSound") {
-                  AudioPlayer.volume(0.10);
+                  AudioPlayer.volume(0.03);
                   AudioPlayer.play();
                 }
                 if (event.data.transactionType == "stopSound") {
