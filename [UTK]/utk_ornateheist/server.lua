@@ -160,6 +160,10 @@ AddEventHandler("utk_oh:ostimer", function()
     lastrobbed = os.time()
     info.stage, info.style, info.locked = 0, nil, false
     Citizen.Wait(300000)
+    for i = 1, #PoliceDoors, 1 do
+        PoliceDoors[i].locked = true
+        TriggerClientEvent("utk_oh:policeDoor_c", -1, i, true)
+    end
     totalcash = 0
     TriggerClientEvent("utk_oh:reset", -1)
 end)
