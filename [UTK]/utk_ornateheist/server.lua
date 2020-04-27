@@ -173,13 +173,7 @@ AddEventHandler("utk_oh:gas", function()
 end)
 RegisterServerEvent("utk_oh:ptfx")
 AddEventHandler("utk_oh:ptfx", function(method)
-    local xPlayers = ESX.GetPlayers()
-
-    for i = 1, #xPlayers, 1 do -- This don't work as I expected :/ But works anyway...
-        if xPlayers[i] ~= source then
-            TriggerClientEvent("utk_oh:ptfx_c", xPlayers[i], method)
-        end
-    end
+    TriggerClientEvent("utk_oh:ptfx_c", -1, method)
 end)
 RegisterServerEvent("utk_oh:alarm_s")
 AddEventHandler("utk_oh:alarm_s", function(toggle)
