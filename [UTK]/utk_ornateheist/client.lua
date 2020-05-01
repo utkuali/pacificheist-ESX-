@@ -685,7 +685,8 @@ function UTK:IdCard()
     local pedco = GetEntityCoords(PlayerPedId())
     local IdProp = CreateObject(GetHashKey("p_ld_id_card_01"), pedco, true, true, false)
     local boneIndex = GetPedBoneIndex(PlayerPedId(), 28422)
-    local panel = ESX.Game.GetClosestObject(("hei_prop_hei_securitypanel"), pedco)
+    --local panel = ESX.Game.GetClosestObject(("hei_prop_hei_securitypanel"), pedco)
+    local panel = GetClosestObjectOfType(pedco, 4.0, GetHashKey("hei_prop_hei_securitypanel"), false, false, false)
 
     AttachEntityToEntity(IdProp, ped, boneIndex, 0.12, 0.028, 0.001, 10.0, 175.0, 0.0, true, true, false, true, 1, true)
     TaskStartScenarioInPlace(ped, "PROP_HUMAN_ATM", 0, true)
@@ -1269,7 +1270,8 @@ AddEventHandler("utk_oh:openvault_c", function(method)
 end)
 RegisterNetEvent("utk_oh:vault")
 AddEventHandler("utk_oh:vault", function(method)
-	local obj = ESX.Game.GetClosestObject(UTK.vault.type, vector3(UTK.vault.x, UTK.vault.y, UTK.vault.z))
+	--local obj = ESX.Game.GetClosestObject(UTK.vault.type, vector3(UTK.vault.x, UTK.vault.y, UTK.vault.z))
+	local obj = GetClosestObjectOfType(UTK.vault.x, UTK.vault.y, UTK.vault.z, 2.0, GetHashKey(UTK.vault.type), false, false, false)
     local count = 0
 
     if method == 1 then
