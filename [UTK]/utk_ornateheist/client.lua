@@ -1048,7 +1048,7 @@ Citizen.CreateThread(function()
             DisableControlAction(0, 24, true)
             DisableControlAction(0, 25, true)
 
-            if GetScaleformMovieFunctionReturnBool(ClickReturn) then
+            if IsScaleformMovieMethodReturnValueReady(ClickReturn) then
                 program = GetScaleformMovieFunctionReturnInt(ClickReturn)
                 if program == 82 and not Hacking then
                     lives = 5
